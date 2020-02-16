@@ -12,6 +12,7 @@ struct Node
     int indegree;
     int data;
     struct Node *next;
+    struct Node *link;
 };
 
 typedef struct Node nde;
@@ -19,7 +20,6 @@ typedef struct Node nde;
 int priority[100];
 nde *adjacency[20];
 struct Node *head = NULL;
-
 
 void insert(int new_data)
 {
@@ -29,7 +29,6 @@ void insert(int new_data)
     new_node->indegree = 0;
     head = new_node;
 }
-
 
 void append(int new_data)
 {
@@ -58,10 +57,47 @@ void display()
     std::cout << std::endl;
 }
 
-void appendDegree(int node)
+void displayLinks(nde arr[][20], int a, int b)
+{
+    for (int i = 1; i < a; i++)
+    {
+        std::cout << "node with priority " << i << ":  ";
+        
+        for (int j = 0; j < b; j++)
+        {
+            std::cout << arr[i][j].data<< "  ";
+        }
+        std::cout << std::endl;
+    }
+    
+}
+
+nde giveNode(int node)
 {
     struct Node *ptr;
     ptr = head;
+    int i = 1;    
+    while (i < node)
+    {
+        // cout << ptr->data << " ";
+        ptr = ptr->next;
+        i = i + 1;
+    }
+return *ptr;
+}
+
+void assignLink(int node, int presentnde)
+{
+    struct Node *ptr;
+    struct Node *ptr2;
+    ptr = head;
+    ptr2 = head;
+    int j = 0;
+    while (j < presentnde)
+    {
+        ptr2 = ptr2->next;
+        j = j + 1;
+    }
     int i = 1;
     while (i < node)
     {
@@ -69,12 +105,15 @@ void appendDegree(int node)
         ptr = ptr->next;
         i = i + 1;
     }
-    ptr->indegree = ptr->indegree+1;
+    ptr->link = ptr2;
+    ptr->indegree = ptr->indegree + 1;
+
     display();
 }
 
 int main()
 {
+    nde (link[20][20]); 
     int nodes;
     cout << "enter the number of nodes: " << endl;
     cin >> nodes;
@@ -94,18 +133,20 @@ int main()
     {
         cout << "node: " << i << endl;
         int ch, node;
-        int j = 0;
+        j = 0;
         while (j < 20)
         {
             cout << "Enter choice: " << endl;
             cout << "1 if there exists a link to node " << i << endl;
             cout << "2 if there is no link anymore" << endl;
             cin >> ch;
-            if (ch==1)
+            if (ch == 1)
             {
                 cout << "enter the node that it is linked to:" << endl;
                 cin >> node;
-                appendDegree(node);                
+                link[i][j] = giveNode(node);
+                assignLink(node, i);
+
             }
             else if (ch == 2)
             {
@@ -119,6 +160,7 @@ int main()
     }
 
     display();
+    displayLinks(link, i, j);
 
     return 0;
 }
